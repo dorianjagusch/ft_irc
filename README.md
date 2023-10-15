@@ -4,13 +4,13 @@
 
 ## Overview
 
-`ft_irc` is a project from School 42 that involves the creation of an IRC (Internet Relay Chat) server and client. IRC is a real-time text communication protocol, and this project offers an opportunity to gain expertise in network programming and communication protocols.
+`ft_irc` is a project from School 42 that involves the creation of an IRC (Internet Relay Chat) server and client. IRC is a real-time text communication protocol, and this project offers an opportunity to gain expertise in network programming and communication protocols. As a reference client, we used [Irssi](https://irssi.org/New-users/). We recommend using it, too, when trying out the project.
 
 ## Description
 
 The `ft_irc` project is a practical exercise in building an IRC server and client. It involves the following components:
 
-- **Server**: The project aims to create a functional IRC server capable of handling multiple clients simultaneously. The server should manage user connections, channels, and chat messages.
+- **Server**: The project aims to create a functional IRC server capable of handling multiple clients simultaneously. The server should manage user connections, channels, operators and chat messages.
 - **Command Handling**: The server and client must handle IRC commands for communication, such as JOIN, PRIVMSG, and QUIT.
 - **Channel Management**: Users can create, join, and manage channels for group communication.
 - **Error Handling**: The project emphasizes robust error handling to ensure that the server and client can handle unexpected issues gracefully.
