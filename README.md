@@ -89,5 +89,7 @@ Start the IRC server by running the compiled server executable with appropriate 
 
 ```bash
 ./irc_client <options>
-Use IRC commands to join channels, send messages, and engage in real-time communication with other users.
 ```
+
+Use IRC commands to join channels, send messages, and engage in real-time communication with other users.
+
