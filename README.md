@@ -1,4 +1,4 @@
-# 🏗️🚧 ft_irc - Internet Relay Chat Server 🏗️🚧
+# ft_irc - Internet Relay Chat Server
 
 *This project was developed as part of the School 42 curriculum in collaboration with [Tuukka Tikanoja](https://github.com/tikanoja).*
 
