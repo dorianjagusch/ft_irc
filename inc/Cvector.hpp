@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Uvector.hpp                                        :+:      :+:    :+:   */
+/*   Cvector.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/30 08:53:33 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/04 09:46:53 by djagusch         ###   ########.fr       */
+/*   Created: 2023/10/11 08:57:09 by ttikanoj          #+#    #+#             */
+/*   Updated: 2023/11/04 10:57:56 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UVECTOR_HPP
-# define UVECTOR_HPP
+#ifndef CVECTOR_HPP
+# define CVECTOR_HPP
 
 # include <iostream>
 # include <vector>
 # include <typeinfo>
-# include "User.hpp"
+# include "Channel.hpp"
 
-class Uvector : public std::vector<User*>
+class Cvector : public std::vector<Channel*>
 {
 	public:
-		Uvector();
-		Uvector(Uvector const& src);
-		~Uvector();
+		Cvector();
+		Cvector(Cvector const& src);
+		~Cvector();
+		Cvector &	operator=(Cvector const & rhs);
 
-		Uvector &	operator=(Uvector const & rhs);
-		std::string	toIRCLower(std::string const & str) const;
-		User*		findUserBySocket(int const socket_fd) const;
-		User*		findUserByNick(std::string const & nick) const;
-		User*		findUserByIP(std::string const & ip_address) const;
-		
-		void		removeUserByNick(std::string const & nick);
+		Channel*	findChannel(std::string const & name) const;
+		Channel*	createChannel(std::string const & name);
+		void		deleteChannel(Channel* toDelete);
+		Cvector		findChannelsByUser(std::string const & name) const;
 
 	private:
+		std::string toIRCLower(std::string const & str) const;
 };
 
 #endif

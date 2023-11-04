@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 11:43:52 by djagusch          #+#    #+#             */
-/*   Updated: 2023/10/05 10:08:11 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:33:05 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ Message::Message()
 
 Message::Message(std::string msg)
 {
+	size_t in = 0;
+	while ((in = msg.find('\r', in)) != std::string::npos) // find "\r"
+        msg.replace(in, 1, "");
 	std::istringstream iss(msg);
 	std::string token;
 	int index = 0;
-	
 	p_prefix = "";
 	p_command = "";
 	p_params.push_back("");
@@ -50,26 +52,15 @@ Message::Message(std::string msg)
 	return ;
 }
 
-void Message::printContent()
-{
-	std::cout << "$ directly after param to spot whitespace/nondisp" << std::endl;
-	std::cout << "Prefix: " << this->p_prefix << "$" << std::endl;
-	std::cout << "Command: " << this->p_command << "$" << std::endl;
-	for (unsigned long i = 0; i < p_params.size(); i++)
-		std::cout << "Params[" << i << "]: " << p_params[i] << "$" << std::endl;
-	std::cout << "Trailing: " << this->p_trailing << "$" << std::endl;
-}
-
-Message::Message(Message const& src)
-{
+Message::Message(Message const& src){
 	*this = src; 
 }
 
 Message::~Message()
 {}
 
-Message& Message::operator=(Message const& rhs)
-{
+Message& Message::operator=(Message const& rhs){
+	
 	if(this != &rhs)
 	{
 		p_command = rhs.p_command;
@@ -81,6 +72,7 @@ Message& Message::operator=(Message const& rhs)
 }
 
 std::string Message::combineParams() {
+	
 	std::string combinedParams;
 	for (size_t i = 0; i < p_params.size(); i++) {
 		combinedParams += p_params[i];
@@ -91,6 +83,7 @@ std::string Message::combineParams() {
 }
 
 const char* Message::toString() {
+	
 	std::string temp = "";
 	if (p_prefix != "") {
 		temp = ":";
@@ -119,26 +112,33 @@ const char* Message::toString() {
 	}
 	return str;
 }
+
 std::string const &	Message::getPrefix() const{
+
 	return p_prefix;
 }
 
 std::vector<std::string> const &	Message::getParams() const {
+
 	return p_params;
 }
 
 std::string const &	Message::getTrailing() const {
+
 	return p_trailing;
 }
 
 User const *	Message::getSender() const {
+	
 	return p_sender;
 }
 
 User const *	Message::getRecipient() const {
+
 	return p_recipient;
 }
 
 std::string const &	Message::getCommand() const {
+	
 	return p_command;
 }

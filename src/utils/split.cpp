@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_ping.cpp                                       :+:      :+:    :+:   */
+/*   split.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/04 09:43:27 by djagusch          #+#    #+#             */
-/*   Updated: 2023/10/13 13:32:17 by djagusch         ###   ########.fr       */
+/*   Created: 2023/10/17 15:23:55 by djagusch          #+#    #+#             */
+/*   Updated: 2023/10/26 08:58:02 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/Commands.hpp"
+#include "../../inc/Utils.hpp"
+#include <iostream>
 
-int cmd_ping(IRCServer& server, User& user, Message& message){
-	cmd_pong(server, user, message);
-	return 0;
+std::vector<std::string> split(const std::string& str, char c){
+
+	std::vector<std::string>	tokens;
+	std::istringstream			stream(str);
+	std::string					token;
+	size_t						i = 0;
+
+	for (; i < 3 && std::getline(stream, token, c); i++)
+		tokens.push_back(token);
+	return (tokens);
 }

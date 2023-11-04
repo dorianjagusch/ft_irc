@@ -6,7 +6,7 @@
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:52:00 by djagusch          #+#    #+#             */
-/*   Updated: 2023/10/05 09:42:56 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/03 06:30:57 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int IRCServer::executeCommand(User& user, Message& message) {
 
-	std::map<std::string, CommandFunction>::iterator it = p_commandMap.find(message.getCommand());
+	commandMap::iterator it = p_commandMap.find(message.getCommand());
 	if (it != p_commandMap.end()) {
-		CommandFunction func = it->second;
+		commandFunction func = it->second;
 		return func(*this, user, message);
 	} else {
-		user.getSendBuffer().addToBuffer(ERR_UNKNOWNCOMMAND(getName(), message.getCommand()).c_str());
+		user.send(ERR_UNKNOWNCOMMAND(getName(), message.getCommand()));
 		return 1;
 	}
 }

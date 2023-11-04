@@ -6,25 +6,26 @@
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:47:52 by djagusch          #+#    #+#             */
-/*   Updated: 2023/10/04 16:06:58 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:18:17 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef REPLY_HPP
 # define REPLY_HPP
 
 # include <string>
 
-//void	sendRPL(int const client_fd, std::string client_buffer);
+//void	sendRPL(int const user_fd, std::string user_buffer);
 
-# define USER_ID(nickname, username, host) (":" + nickname + "!" + username + "@" + host)
+# define USER_ID(nickname, username, host) (nickname + "!" + username + "@" + host)
 
 /*Registration*/
 
-# define RPL_WELCOME(servername, nick, user, host)(":" + servername + " 001 Welcome to the Internet Relay Network" + nick"!" + user + "@" + host + "\r\n") //001
-# define RPL_YOURHOST(servername, version)(":" + servername + " 002 Your host is " + servername + ", running version " + version + "\r\n") //002
-# define RPL_CREATED(servername, date)(":" + servername + " 003 This server was created" + date + "\r\n") //003
-# define RPL_MYINFO(servername, version, umodes, cmodes)(":" + servername + " 004 " + servername + " " + version + " " + umodes + " " + cmodes + "\r\n") //004
+# define RPL_WELCOME(servername, nick, user, host)(":" + servername + " 001 " + nick + " Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host + "\r\n") //001
+# define RPL_YOURHOST(servername, version)(":" + servername + " 002 * Your host is " + servername + ", running version " + version + "\r\n") //002
+# define RPL_CREATED(servername, date)(":" + servername + " 003 " + servername + " :This server was created " + date + "\r\n") //003
+# define RPL_MYINFO(servername, version, umodes, cmodes)(":" + servername + " 004 " + "* " + servername + " " + version + " " + umodes + " " + cmodes + "\r\n") //004
 # define RPL_BOUNCE(servername, port)(":" + servername + " 005 Try server " + server name + ", port " + port + "\r\n") //005
 # define RPL_TRACELINK(servername, version, debuglevel,  destination, next_server, protocolversion, linkuptime, bssendq, usbackq)\
 ("Link " + version + " & " debug level + " " + destination + " " + nextserver + " V" + protocolversion + linkuptime + " " + bssendq + " " +  ussendq + "\r\n") //200
@@ -36,11 +37,11 @@
 # define RPL_TRACESERVICE(servername, class, name, type, activetype)(":" + servername + " 207 Service " + class + " " + name + " " + type + " " + activetype + "\r\n") //207
 # define RPL_TRACENEWTYPE(servername, newtype, client_name)(":" + servername + " 208 " + newtype + " 0 " + client_name + "\r\n") //208
 # define RPL_TRACECLASS(servername, class, count)(":" + servername + " 209 Class " + class + " " + count + "\r\n") //209
-# define RPL_STATSLINKINFO(servername, linkname, sendq, sentmsg, sentkbyte, recvmsg, recvkbyte, timme_open)\
-(linkname + " " + sendq + " " + sentmsg + sentkbyte + " " + recvmsg + recvkbyte + " " + time_open + "\r\n") //211
+# define RPL_STATSLINKINFO(servername, linkname, sendq, sentmsg, sentkbyte, recvmesg, recvkbyte, timme_open)\
+(linkname + " " + sendq + " " + sentmsg + sentkbyte + " " + recvmesg + recvkbyte + " " + time_open + "\r\n") //211
 # define RPL_STATSCOMMANDS(servername, command, count, b_byte, remote_count)(":" + servername + " 212 " + command + " " + count + " " + n_byte + " " + remote_count + "\r\n") //212
 # define RPL_ENDOFSTATS(servername, stats_letter)(":" + servername + " 219 " + stats_letter + " :End of STATS report\r\n") //219
-# define RPL_UMODEIS(servername, usermodestring)(":" + servername + " 221 " + usermodestring + "\r\n") //221
+# define RPL_UMODEIS(servername, user, modestring)(":" + servername + " 221 " + user + " " + modestring + "\r\n") //221
 # define RPL_SERVLIST(servername, name, server, mask, type, hopcount, info)(":" + servername + " 234 " + name + " " + server + " " + mask + " " + type + " " + hopcount + " " + info + "\r\n") //234
 # define RPL_SERVLISTEND(servername, mask, type)(":" + servername + " 235 " + mask + " " + type + " :End of service listing\r\n") //235
 # define RPL_STATSUPTIME(servername, serveruptime)(":" + servername + " 242 :Server Up serveruptime\r\n") //242 as %d days %d:%02d:%02d
@@ -57,7 +58,7 @@
 # define RPL_TRACELOG(servername, logfile, debuglevel)(":" + servername + " 261 File " + logfile + " " + debuglevel + "\r\n") //261
 # define RPL_TRACEEND(servername, version, debuglevel)(":" + servername + " 262 " + servername +  + " " + version + "" & debuglevel + " :End of TRACE\r\n") //262
 # define RPL_TRYAGAIN(servername, command)(":" + servername + " 263 " + command + " :Please wait a while and try again.\r\n") //263
-# define RPL_AWAY(servername, nick, message)(":" + servername + " 301 " + nick + ": " + message + "\r\n") //301
+# define RPL_AWAY(servername, nick, recipient, message)(":" + servername + " 301 " + nick + " " + recipient+ " :" + message + "\r\n") //301
 # define RPL_USERHOST(servername)(":" + servername + " 302 \r\n") //302 ??????
 # define RPL_ISON(servername)(":" + servername + " 303 \r\n") //303 ??????????
 # define RPL_UNAWAY(servername)(":" + servername + " 305 :You are no longer marked as being away\r\n") //305
@@ -72,31 +73,31 @@
 # define RPL_WHOISCHANNELS(servername)(":" + servername + " 319 \r\n") //319 ?????
 # define RPL_LIST(servername, channel, n_visible, topic)(":" + servername + " 322 " + channel + " " + n_visible + " :" + topic + "\r\n") //322
 # define RPL_LISTEND(servername)(":" + servername + " 323 :End of LIST\r\n") //323
-# define RPL_CHANNELMODEIS(servername, cannel, mode, mode_params)(":" + servername + " 324 " + channel +  + " " + mode + " " + mode_params + "\r\n") //324
+# define RPL_CHANNELMODEIS(servername, user, channel, mode, mode_params)(":" + servername + " 324 " + user + " " + channel + " " + mode + " " + mode_params + "\r\n") //324
 # define RPL_UNIQOPIS(servername, channel, nickname)(":" + servername + " 325 " + channel + " " + nickname + "\r\n") //325
 # define RPL_NOTOPIC(servername, channel)(":" + servername + " 331 " + channel + " :No topic is set\r\n") //331
-# define RPL_TOPIC(servername, channel, topic)(":" + servername + " 332 " + channel + " :" + topic + "\r\n") //332
-# define RPL_INVITING(servername, channel, nick)(":" + servername + " 341 " + channel + " " + nick + "\r\n") //341
+# define RPL_TOPIC(servername, nick, channel, topic)(":" + servername + " 332 " + nick + " " + channel + " :" + topic + "\r\n") //332
+# define RPL_INVITING(servername, inviter, invited, channel)(":" + servername + " 341 " + inviter + " " + invited + " " + channel + "\r\n") //341
 # define RPL_SUMMONING(servername, user)(":" + servername + " 342 " +  user + " :Summoning user to IRC\r\n") //342
 # define RPL_INVITELIST(servername)(":" + servername + " 346 \r\n") //346 ???????
 # define RPL_ENDOFINVITELIST(servername, channel)(":" + servername + " 347 " + channel + " :End of channel invite list\r\n") //347
 # define RPL_EXCEPTLIST(servername)(":" + servername + " 348 \r\n") //348 ??????
 # define RPL_ENDOFEXCEPTLIST(servername, channel)(":" + servername + " 349 " + channel + " :End of channel exception list\r\n") //349
 # define RPL_VERSION(servername, version, debuglevel, server, comments)(":" + servername + " 351 " + version + "." + debuglevel + " " + server + " :" + comments + "\r\n") //351
-# define RPL_WHOREPLY(servername)(":" + servername + " 352 \r\n") //352 ??????
-# define RPL_NAMREPLY(servername)(":" + servername + " 353 \r\n") //353 ???????
+# define RPL_WHOREPLY(servername)(":" + servername + " 352 " + nick + " " + channel + " " + username + " " + host + " " + servername + " " + nick + " " + status + " :0 " + realname + "\r\n")
+# define RPL_NAMREPLY(servername, user, channel, userlist)(":" + servername + " 353 " + user + " @ " + channel + " :" + userlist + "\r\n") //353
 # define RPL_LINKS(servername, mask, server, hopcount, serverinfo)(":" + servername + " 364 " + mask +  + " " + server + " :" + hopcount + " " + serverinfo + "\r\n") //364 ????? not sure we need it
 # define RPL_ENDOFLINKS(servername, mask)(":" + servername + " 365 " +  mask + " :End of LINKS list\r\n") //365
-# define RPL_ENDOFNAMES(servername, channel)(":" + servername + " 366 " + channel + " :End of NAMES list\r\n") //366
+# define RPL_ENDOFNAMES(servername, user, channel)(":" + servername + " 366 " + user + channel + " :End of NAMES list\r\n") //366
 # define RPL_BANLIST(servername, channel, banmask)(":" + servername + " 367 " + channel +  + " " + banmask + "\r\n") //367
 # define RPL_ENDOFBANLIST(servername)(":" + servername + " 368 \r\n") //368
 # define RPL_ENDOFWHOWAS(servername)(":" + servername + " 369 " + nick + " :End of WHOWAS\r\n") //369
 # define RPL_INFO(servername, string)(":" + servername + " 371 :" + string + "\r\n") //371
-# define RPL_MOTD(servername)(":" + servername + " 372 :- " + text + "\r\n") //372
+# define RPL_MOTD(servername, text)(":" + servername + " 372 :- " + text + "\r\n") //372
 # define RPL_ENDOFINFO(servername)(":" + servername + " 374 :End of INFO list\r\n") //374
-# define RPL_MOTDSTART(servername)(":" + servername + " 375 :- " + server + " Message of the day - \r\n") //375
+# define RPL_MOTDSTART(servername)(":" + servername + " 375 :- " + servername + " Message of the day - \r\n") //375
 # define RPL_ENDOFMOTD(servername)(":" + servername + " 376 :End of MOTD command\r\n") //376
-# define RPL_YOUREOPER(servername)(":" + servername + " 381 :You are now an IRC operator\r\n") //381
+# define RPL_YOUREOPER(servername, nick)(":" + servername + " 381 " + nick + " :You are now an IRC operator\r\n") //381
 # define RPL_REHASHING(servername)(":" + servername + " 382 " + config + "file :Rehashing\r\n") //382
 # define RPL_YOURESERVICE(servername, servicename)(":" + servername + " 383 You are service " + servicename + "\r\n") //383
 # define RPL_MYPORTIS(servername)(":" + servername + " 384 \r\n") //384
@@ -105,5 +106,8 @@
 # define RPL_USERS(servername, userbame, ttyline, hostname)(":" + servername + " 393 :" + username + " " + ttyline + " " + hostname + "\r\n") //393
 # define RPL_ENDOFUSERS(servername)(":" + servername + " 394 :End of users\r\n") //394
 # define RPL_NOUSERS(servername)(":" + servername + " 395 :Nobody logged in\r\n") //395
+
+# define RPL_NICK(ouser, uuser, host, user)(":" + ouser + "!" + uuser + "@" + host + " NICK " +  user + "\r\n")
+# define RPL_CAP(servername, type, text)(":" + servername + " CAP * " + type + " :" + text + "\r\n")
 
 #endif
