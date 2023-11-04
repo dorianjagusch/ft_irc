@@ -63,7 +63,7 @@ Before you start working on the `ft_irc` project, ensure that you have the follo
 - `make`
 - A compatible C library
 
-The provided repository should contain any additional dependencies or libraries required for the project.
+Our repository should already contain any additional dependencies or libraries required for the project.
 
 ## Installation
 
