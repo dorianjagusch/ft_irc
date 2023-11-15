@@ -3,7 +3,7 @@
 *This project was developed as part of the School 42 curriculum in collaboration with [Tuukka Tikanoja](https://github.com/tikanoja).*
 
 ## Overview
-<img src="imgs/irssi.png" width="60%" align="center">
+<img src="imgs/irssi.png" width="80%" align="center">
 
 `ft_irc` is a project from School 42 that involves the creation of an IRC (Internet Relay Chat) server and client. IRC is a real-time text communication protocol, and this project offers an opportunity to gain expertise in network programming and communication protocols. As a reference client, we used [Irssi](https://irssi.org/New-users/). We recommend using it, too, when trying out the project.
 
@@ -60,9 +60,9 @@ The implementation of `ft_irc` involved a variety of technical skills:
 
 Here is a graphical representation of how the server works. An annotated version can be found [here](https://www.figma.com/file/qUbRWMAYafTy1LIMP9Jbtl/irc-jam?type=whiteboard&node-id=0%3A1&t=BbWNFXiyWJP4WV8v-1) 
 
-<img src="imgs/server_client_setup.png" width="48%" align="center">
-<img src="imgs/polling_loop.png" width="48%" align="center">
-<img src="imgs/message_forwarding.png" width="48%" align="center">
+<img src="imgs/server_client_setup.png" width="60%" align="center">
+<img src="imgs/polling_loop.png" width="60%" align="center">
+<img src="imgs/message_forwarding.png" width="60%" align="center">
 
 ## Prerequisites
 
