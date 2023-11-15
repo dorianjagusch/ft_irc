@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_privmsg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 09:43:33 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/04 13:16:45 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/07 11:16:56 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void sendToUser(IRCServer& server, User& user, Message& message, std::str
 		user.send(RPL_AWAY(server.getName(), user.getNick(),
 			recipient->getNick(), recipient->getAwayMsg()));
 	}
-	std::string msg =  ":" + USER_ID(user.getNick(), user.getUserName(), "127.0.0.1") +
+	std::string msg =  ":" + USER_ID(user.getNick(), user.getUserName(), server.getName()) +
 		" PRIVMSG " + target + " :" + message.getTrailing() + "\r\n";
 	recipient->send(msg);
 }

@@ -6,7 +6,7 @@
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 14:56:03 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/04 12:21:29 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/07 07:19:33 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,11 @@ std::string	Channel::setBatchMode(User &user, std::vector<std::string> const & m
 					}
 					break;
 				case ('l'):
-					if (word + ++move_flag < modes.size()){
-						if (this->setUserlimit(modes.at(word + move_flag))){
+					if (word + ++move_flag < modes.size()
+						&& this->setUserlimit(modes.at(word + move_flag))){
 							this->setMode(limit);
 							indeces.push_back(word + move_flag);
 							opsdone += characters[4];
-						}
 					}
 					break;
 				case ('-'):
@@ -73,7 +72,7 @@ std::string	Channel::setBatchMode(User &user, std::vector<std::string> const & m
 			}
 		}
 	}
-	word += move_flag;
+	word += move_flag + 1;
 	return opsdone;
 }
 
@@ -82,18 +81,18 @@ std::string	Channel::unsetBatchMode(User & user, std::vector<std::string> const 
 
 	std::string					opsdone = "";
 	static const std::string	characters = "itkol";
-	size_t						move_flag = 1;
+	size_t						move_flag = 0;
 
 	if (modes.at(word)[character] == '-')
 	{
 		for (; character < modes.at(word).size(); character++ ){
 			switch (modes.at(word)[character]){
 				case ('i'):
-					if (this->setMode(invite))
+					if (this->unsetMode(invite))
 						opsdone += characters[0];
 					break;
 				case ('t'):
-					if (this->setMode(topic_rest))
+					if (this->unsetMode(topic_rest))
 						opsdone += characters[1];
 					break;
 				case ('k'):
@@ -127,6 +126,6 @@ std::string	Channel::unsetBatchMode(User & user, std::vector<std::string> const 
 			}
 		}
 	}
-	word += move_flag - 1;
+	word += move_flag + 1;
 	return opsdone;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 23:33:50 by tuukka            #+#    #+#             */
-/*   Updated: 2023/11/03 15:15:56 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/09 08:40:59 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 User::User(int const socket_fd, char const * ipaddress, std::string host) : p_socket_fd(socket_fd){
 
-	memcpy(p_ipaddress, ipaddress, INET6_ADDRSTRLEN);
+	std::memcpy(p_ipaddress, ipaddress, INET6_ADDRSTRLEN);
 	p_host = host;
 
 	p_mode = 0;
@@ -46,13 +46,13 @@ User& User::operator=(User const& rhs)
 		p_realname = rhs.p_realname;
 		p_mode = rhs.p_mode;
 		p_socket_fd = rhs.p_socket_fd;
-		memcpy(p_ipaddress,rhs.p_ipaddress, INET6_ADDRSTRLEN);
+		std::memcpy(p_ipaddress,rhs.p_ipaddress, INET6_ADDRSTRLEN);
 	}
 	return *this;
 }
 
 void	User::setIP(char const * ip){
-	memcpy(p_ipaddress, ip, INET6_ADDRSTRLEN);
+	std::memcpy(p_ipaddress, ip, INET6_ADDRSTRLEN);
 }
 
 void	User::setSocket(int socketfd){
@@ -160,8 +160,12 @@ void	User::setRegistrationFlag(int i, IRCServer& server)
 		p_nickFlag = true;
 	else if (i == 2)
 		p_userFlag = true;
-	else if (i == 3)
+	else if (i == 3) {
+		if (p_passFlag == true)
+			return ;
 		p_passFlag = true;
+		this->send(":PawsitiveIRC NOTICE * :Pawsword accepted! Please proceed with NICK and USER commands.\r\n");
+	}
 
 	if (p_welcomeFlag == false && p_nickFlag == true && p_userFlag == true && p_passFlag == true) {
 		p_welcomeFlag = true;

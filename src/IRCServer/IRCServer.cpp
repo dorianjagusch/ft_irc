@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 23:21:45 by tuukka            #+#    #+#             */
-/*   Updated: 2023/11/04 08:15:00 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/14 10:49:50 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ std::string const & IRCServer::getCmodes(void) const{
 void signalHandler(int signum) {
 	
 	if (signum == SIGINT) {
-		std::cout << std::endl << "Server quit." << std::endl;
+		std::cout << std::endl << "Server quit." << BRIGHT_COLOR_RED << " <3" << COLOR_END << std::endl;
 		exit(0);
 	}
 }
@@ -94,7 +94,7 @@ void IRCServer::initServer() {
 	setGlobals() ;
 	initCommands();
 	initOperators();
-	std::cout << "\033[0;32mPawsitiveIRC server is starting"<< std::endl;
+	std::cout << BRIGHT_COLOR_GREEN << "PawsitiveIRC server is starting"<< std::endl;
 	std::cout << "   _______________                       _______________" << "\n"
 	<< "  |  ___________  |     .-.     .-.     |  ___________  |" << "\n"
 	<< "  | |           | |    .****. .****.    | |           | |" << "\n"
@@ -106,8 +106,10 @@ void IRCServer::initServer() {
 	<< "    _|__|/ \\|_|_.............*........... _|__|/ \\|_|_" << "\n"
 	<< "   / ********** \\                         / ********** \\" << "\n"
 	<< " /  ************  \\                     /  ************  \\" << "\n"
-	<< "--------------------                   -------------------- \033[0m" << std::endl;
+	<< "--------------------                   -------------------- " << COLOR_END << std::endl;
 	std::cout << "Running..."<< std::endl;
+	std::cout << "Connect with Irssi:\t/connect 127.0.0.1 " << p_port << " " << p_password << std::endl;
+	std::cout << "or with Netcat:\t\tnc 127.0.0.1 " << p_port << std::endl;
 	return ;
 }
 
@@ -125,25 +127,27 @@ void IRCServer::setGlobals() {
 void IRCServer::initCommands() {
 
 	std::pair<std::string, commandFunction> cmdPairs[] = {
-		std::make_pair("CAP", cmd_cap),
-		std::make_pair("PASS", cmd_pass),
-		std::make_pair("NICK", cmd_nick),
-		std::make_pair("USER", cmd_user),
-		std::make_pair("MODE", cmd_mode),
-		std::make_pair("MOTD", cmd_motd),
-		std::make_pair("OPER", cmd_oper),
-		std::make_pair("AWAY", cmd_away),
-		std::make_pair("QUIT", cmd_quit),
-		std::make_pair("PING", cmd_ping),
-		std::make_pair("PONG", cmd_pong),
-		std::make_pair("PRIVMSG", cmd_privmsg),
-		std::make_pair("NOTICE", cmd_notice),
-		std::make_pair("KILL", cmd_kill),
-		std::make_pair("JOIN", chan_cmd_join),
-		std::make_pair("PART", chan_cmd_part),
-		std::make_pair("TOPIC", chan_cmd_topic),
-		std::make_pair("INVITE", chan_cmd_invite),
-		std::make_pair("KICK", chan_cmd_kick)
+		std::make_pair("cap", cmd_cap),
+		std::make_pair("pass", cmd_pass),
+		std::make_pair("nick", cmd_nick),
+		std::make_pair("user", cmd_user),
+		std::make_pair("mode", cmd_mode),
+		std::make_pair("motd", cmd_motd),
+		std::make_pair("oper", cmd_oper),
+		std::make_pair("away", cmd_away),
+		std::make_pair("quit", cmd_quit),
+		std::make_pair("ping", cmd_ping),
+		std::make_pair("pong", cmd_pong),
+		std::make_pair("privmsg", cmd_privmsg),
+		std::make_pair("notice", cmd_notice),
+		std::make_pair("kill", cmd_kill),
+		std::make_pair("who", cmd_who),
+		std::make_pair("whois", cmd_whois),
+		std::make_pair("join", chan_cmd_join),
+		std::make_pair("part", chan_cmd_part),
+		std::make_pair("topic", chan_cmd_topic),
+		std::make_pair("invite", chan_cmd_invite),
+		std::make_pair("kick", chan_cmd_kick)
 	};
 	p_commandMap.insert(cmdPairs, cmdPairs + sizeof(cmdPairs) / sizeof(cmdPairs[0]));
 }
@@ -155,6 +159,8 @@ void IRCServer::initOperators(){
 	operFile.open("config/operators.config", std::fstream::in);
 	if (!operFile.good() || !operFile.is_open() || operFile.peek() < 0){
 		p_logger->log("Cannot set any operators", __FILE__, __LINE__);
+		if (operFile.is_open())
+			operFile.close();
 		return ;
 	}
 	char line[256];
@@ -164,6 +170,7 @@ void IRCServer::initOperators(){
 		rawOper = split(string, ' ');
 		p_opers.push_back(Operator(rawOper[0], rawOper[1], rawOper[2]));
 	}
+	operFile.close();
 }
 
 void IRCServer::log(std::string string, std::string file, int line){
@@ -180,19 +187,18 @@ int IRCServer::pollingRoutine() {
 		if ((poll_count = poll(&(p_pfds[0]), p_fd_count, 0)) == -1)
 			return (-1);
 		for (nfds_t i = 0; i < p_fd_count; i++) {
-			if (p_pfds[i].revents & (POLLIN | POLLOUT | POLLNVAL | POLLERR)) {
-				if (i == 0) {
-					if (acceptClient()){
-						p_logger->log("Failed to accept new client", __FILE__, __LINE__);
+			if (p_pfds[i].revents & (POLLIN | POLLOUT | POLLNVAL | POLLERR | POLLHUP)) {
+				if (p_pfds[i].revents & POLLIN) {
+					if (i == 0) {
+						acceptClient();
+					} else {
+						receiveMsg(p_users.findUserBySocket(p_pfds[i].fd), i);
 					}
-				} else if (p_pfds[i].revents & POLLIN) {
-					receiveMsg(p_users.findUserBySocket(p_pfds[i].fd), i);
 				} else if (p_pfds[i].revents & POLLOUT) {
 					checkSendBuffer(p_users.findUserBySocket(p_pfds[i].fd));
 					checkRecvBuffer(p_users.findUserBySocket(p_pfds[i].fd), i);
-				}
-				else {
-					dropConnection(-1, i);
+				} else if (p_pfds[i].revents & (POLLNVAL | POLLERR | POLLHUP) && i != 0) {
+					dropConnection(0, i);
 					p_logger->log("Connection dropped", __FILE__, __LINE__);
 				}
 			}

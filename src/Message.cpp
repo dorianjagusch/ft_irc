@@ -6,7 +6,7 @@
 /*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 11:43:52 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/03 16:33:05 by ttikanoj         ###   ########.fr       */
+/*   Updated: 2023/11/14 10:52:18 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Message::Message()
 Message::Message(std::string msg)
 {
 	size_t in = 0;
-	while ((in = msg.find('\r', in)) != std::string::npos) // find "\r"
+	while ((in = msg.find('\r', in)) != std::string::npos)
         msg.replace(in, 1, "");
 	std::istringstream iss(msg);
 	std::string token;
@@ -41,6 +41,10 @@ Message::Message(std::string msg)
 		}
 		else if (index >= 1 && token[0] == ':')
 		{
+			if ((p_command == "TOPIC" || p_command == "topic") && token.length() == 1) {
+				p_trailing = ":";
+				break ;
+			}
 			p_trailing = token.substr(1);
 			std::string temp;
 			std::getline(iss, temp, '\n');

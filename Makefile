@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+         #
+#    By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/17 22:43:37 by tuukka            #+#    #+#              #
-#    Updated: 2023/11/04 12:53:52 by djagusch         ###   ########.fr        #
+#    Updated: 2023/11/07 12:17:04 by ttikanoj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC_FILES = DynamicBuffer \
 			cmd_pong \
 			cmd_away \
 			cmd_kill \
+			cmd_who \
 			cmd_mode \
 			commandUtils \
 			cmd_privmsg \

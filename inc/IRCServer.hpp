@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 23:12:09 by tuukka            #+#    #+#             */
-/*   Updated: 2023/11/04 11:09:33 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/09 07:28:07 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include <map>
 # include <utility>
 # include <iostream>
+# include <csignal>
 # include <sstream>
 # include <fstream>
-# include <cstdint>
 # include <cstring>
 # include <ctime>
 # include <string>
@@ -55,6 +55,24 @@
 #  define UNAMELEN 10
 # endif
 
+#define COLOR_END "\033[0m"
+#define COLOR_BLACK "\033[0;30m"
+#define COLOR_RED "\033[0;31m"
+#define COLOR_GREEN "\033[0;32m"
+#define COLOR_YELLOW "\033[0;33m"
+#define COLOR_BLUE "\033[0;34m"
+#define COLOR_MAGENTA "\033[0;35m"
+#define COLOR_CYAN "\033[0;36m"
+#define COLOR_WHITE "\033[0;37m"
+#define BRIGHT_COLOR_BLACK "\033[1;30m"
+#define BRIGHT_COLOR_RED "\033[1;31m"
+#define BRIGHT_COLOR_GREEN "\033[1;32m"
+#define BRIGHT_COLOR_YELLOW "\033[1;33m"
+#define BRIGHT_COLOR_BLUE "\033[1;34m"
+#define BRIGHT_COLOR_MAGENTA "\033[1;35m"
+#define BRIGHT_COLOR_CYAN "\033[1;36m"
+#define BRIGHT_COLOR_WHITE "\033[1;37m"
+
 class User;
 class Channel;
 class Cvector;
@@ -81,19 +99,19 @@ class IRCServer {
 
 		typedef int (*commandFunction)(IRCServer&, User&, Message&);
 		typedef std::map<std::string, commandFunction> commandMap;
-	
+
 		commandMap	p_commandMap;
 
 		void								initServer();
 		void								setGlobals();
 		void 								initCommands();
 		void								initOperators();
-		
+
 		int									getListenerSocket();
 		void*								get_in_addr(struct sockaddr *sa);
 		int									acceptClient();
 		void								dropConnection(ssize_t numbytes, nfds_t i);
-		
+
 		int									receiveMsg(User* user, nfds_t i);
 		int									checkRecvBuffer(User* user, nfds_t i);
 		int									checkSendBuffer(User* user);
@@ -115,7 +133,7 @@ class IRCServer {
 		~IRCServer(void);
 
 		int								pollingRoutine();
-		
+
 		std::string	const & 			getName() const;
 		std::string	const &				getPassword() const;
 		Uvector		const &				getUsers() const;

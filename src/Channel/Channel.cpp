@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 23:29:10 by tuukka            #+#    #+#             */
-/*   Updated: 2023/11/04 14:35:39 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/08 10:06:28 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/Channel.hpp"
 #include "../../inc/Reply.hpp"
-#include <sstream>
 
 
 Channel::Channel(const std::string name) : p_name(name)
@@ -96,13 +95,13 @@ std::string const & Channel::getKey() const
 	return p_key;
 }
 
-size_t Channel::getMaxusers() const
+int Channel::getMaxusers() const
 {
 	return this->p_maxusers;
 }
 
 std::string	Channel::getNicks() const{
-	
+
 	std::string result;
 
 	for (Uvector::const_iterator it = p_members.begin(); it != p_members.end(); it++){
@@ -174,9 +173,9 @@ void Channel::removeFromMembers(User& user)
 
 bool Channel::setUserlimit(std::string limitstr) {
 	std::stringstream ss(limitstr);
-	unsigned int limit;
+	int limit;
 	ss >> limit;
-	if (ss.fail()) {
+	if (ss.fail() || limit < 0 || limit > std::numeric_limits<int>::max()) {
 		return false;
 	}
 	this->p_maxusers = limit;
@@ -199,7 +198,7 @@ int Channel::unsetChop(std::string target) {
 	User* newChop = this->getMembers()->findUserByNick(target);
 	if (newChop == NULL) {
 		return 1;
-	} 
+	}
 	if (this->getChops()->findUserByNick(target) == NULL) {
 		return 2;
 	}

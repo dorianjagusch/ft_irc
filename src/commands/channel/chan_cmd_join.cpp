@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chan_cmd_join.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 09:40:42 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/04 15:22:34 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/08 10:15:49 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static bool checkPermissions(IRCServer& server, User& user,
 	std::vector<std::string> const &params, Channel * toJoin, std::string const & key);
 
 int chan_cmd_join(IRCServer& server, User& user, Message& message){
-	
+
 	std::vector<std::string> const & params = message.getParams();
-	
+
 	if (!(user.getMode() & IRCServer::registered)) {
 		user.send(ERR_NOTREGISTERED(server.getName(), message.getCommand()));
 		return 1;
@@ -66,13 +66,17 @@ int chan_cmd_join(IRCServer& server, User& user, Message& message){
 	if (params.size() > 1){
 		key_ss << params.at(1);
 	}
-	while (std::getline(ss, chan, ',') || (params.size() > 1 && std::getline(key_ss, key, ','))) {
+	while (std::getline(ss, chan, ',')) {
+		if (params.size() > 1 && !std::getline(key_ss, key, ',')){
+			user.send(ERR_NEEDMOREPARAMS(server.getName(), "JOIN"));
+			return 1;
+		}
 		Channel* toJoin = server.getChannels().findChannel(chan);
-		
+
 		if (toJoin != NULL) {
 			if (!checkPermissions(server, user, params, toJoin, key))
 				continue ;
-				
+
 			toJoin->getMembers()->push_back(&user);
 			toJoin->broadcastToChannel(":" + USER_ID(user.getNick(), user.getUserName(),\
 				user.getIP()) + " JOIN :" + toJoin->getName() + "\r\n", NULL);
@@ -90,6 +94,7 @@ int chan_cmd_join(IRCServer& server, User& user, Message& message){
 				continue ;
 			}
 			toJoin = server.getChannels().createChannel(chan);
+			std::cout << BRIGHT_COLOR_YELLOW << "Created new channel " << toJoin->getName() << ". Active channels on server: " << server.getChannels().size() << COLOR_END << std::endl;
 			toJoin->getMembers()->push_back(&user);
 			toJoin->getChops()->push_back(&user);
 			if (params.size() > 1){
@@ -100,6 +105,9 @@ int chan_cmd_join(IRCServer& server, User& user, Message& message){
 			}
 			toJoin->broadcastToChannel(":" + USER_ID(user.getNick(), user.getUserName(),\
 				user.getIP()) + " JOIN :" + toJoin->getName() + "\r\n", NULL);
+			std::string userList = toJoin->getNicks();
+			user.send(RPL_NAMREPLY(server.getName(), user.getNick(), toJoin->getName(), userList));
+			user.send(RPL_ENDOFNAMES(server.getName(), user.getNick(), toJoin->getName()));
 		}
 	}
 	return 0;
@@ -123,14 +131,16 @@ static void removeUserFromAllChannels(IRCServer& server, User& user, Message& me
 		(*it)->removeFromChops(user);
 		(*it)->reopChannel(server.getName());
 		if ((*it)->getMembers()->size() == 0) {
+			std::cout << COLOR_YELLOW << "Deleting channel " << (*it)->getName();
 			server.getChannels().deleteChannel((*it));
+			std::cout << ". Active channels on server: " << server.getChannels().size() << COLOR_END << std::endl;
 		}
 	}
 }
 
 
 static int checkChannelName(std::string name) {
-	
+
 	if (name.length() > 50)
 		return 1;
 	if (name.empty() || (name[0] != '#' && name[0] != '&'))
@@ -155,7 +165,7 @@ static bool checkPermissions(IRCServer& server, User& user,
 		}
 	}
 	if (toJoin->getMode() & Channel::limit && \
-		(toJoin->getMembers()->size() >= toJoin->getMaxusers() || toJoin->getMaxusers() == 0)) {
+		(toJoin->getMembers()->size() >= static_cast<size_t>(toJoin->getMaxusers()) || toJoin->getMaxusers() == 0)) {
 		user.send(ERR_CHANNELISFULL(server.getName(), user.getNick(),\
 			toJoin->getName()));
 		return false;

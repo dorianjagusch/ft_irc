@@ -6,7 +6,7 @@
 /*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 11:42:16 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/03 07:33:07 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/14 11:30:20 by djagusch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int IRCServer::acceptClient()
 
 			p_users.push_back(new User(new_fd, s, this->getName()));
 			p_logger->log("New client accepted from " + static_cast<std::string>(s), __FILE__, __LINE__);
+			std::cout << BRIGHT_COLOR_GREEN << "New connection! Active connections: " << p_users.size() << COLOR_END << std::endl;
 		}
 	}
 	return (0);
@@ -132,12 +133,15 @@ void static cleanupChannels(IRCServer &server, User *user)
 			(*it)->broadcastToChannel(":" + USER_ID(user->getNick(), user->getUserName(), user->getIP()) + " QUIT\r\n", user);
 			(*it)->removeFromChops(*user);
 			(*it)->removeFromMembers(*user);
+			(*it)->reopChannel(server.getName());
 		}
 		if ((*it)->getMembers()->size() == 0)
 		{
+			std::cout << COLOR_YELLOW << "Deleting channel " << (*it)->getName();
 			delete (*it);
 			std::vector<Channel *>::iterator itBackup = server.getChannels().erase(it);
 			it = itBackup;
+			std::cout << ". Active channels on server: " << server.getChannels().size() << COLOR_END << std::endl;
 		}
 		else
 			it++;
@@ -161,11 +165,17 @@ void IRCServer::dropConnection(ssize_t numbytes, nfds_t fd_index)
 	close(p_pfds[fd_index].fd);
 	User *userToRemove = p_users.findUserBySocket(p_pfds[fd_index].fd);
 	cleanupChannels(*this, userToRemove);
+	std::cout << COLOR_GREEN << "Deleting ";
+	if (!(userToRemove->getMode() & IRCServer::registered))
+		std::cout << "an unregistered user";
+	else
+		std::cout << "user " << userToRemove->getNick();
 	if (userToRemove)
 		delete userToRemove;
 	p_users.erase(std::remove(p_users.begin(), p_users.end(), userToRemove), p_users.end());
 	p_pfds.erase(p_pfds.begin() + fd_index);
 	p_fd_count--;
+	std::cout << "Active connections: " << p_users.size() << COLOR_END << std::endl;
 	return;
 }
 
@@ -176,7 +186,10 @@ void IRCServer::delUser(User &user)
 	{
 		if (user.getSocket() == p_users[i]->getSocket())
 		{
+			std::cout << COLOR_GREEN << "Deleting user " << user.getNick() << std::endl;
+			delete p_users[i];
 			p_users.erase(p_users.begin() + static_cast<ssize_t>(i));
+			std::cout << "Active connections: " << p_users.size() << COLOR_END << std::endl;
 			break;
 		}
 	}

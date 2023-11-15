@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_user.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djagusch <djagusch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttikanoj <ttikanoj@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 20:44:00 by djagusch          #+#    #+#             */
-/*   Updated: 2023/11/03 06:37:15 by djagusch         ###   ########.fr       */
+/*   Updated: 2023/11/07 11:14:56 by ttikanoj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 //USER guest 0 * :Ronnie Reagan
 
 int cmd_user(IRCServer& server, User& user, Message& message){
-	if (user.getPassFlag() == false){// || user.getNick().empty() ) { !!!!! this helped
-		user.send(ERR_PASSWDMISMATCH(server.getName()));
+	if (user.getPassFlag() == false){
+		user.send(ERR_RESTRICTED(server.getName()));
 		return 1;
 	}
-	// if (user.getNick().empty()){
-	// 	user.send(ERR_NONICKNAMEGIVEN(server.getName()));
-	// 	return 1;
-	// }
-	if (message.getParams()[2].empty() || message.getTrailing().empty()){
+	if (message.getParams().size() < 3 || 
+		(message.getParams().size() >= 3 && (message.getParams()[0].empty()
+			|| message.getParams()[1].empty() || message.getTrailing().empty()))){
 		user.send(ERR_NEEDMOREPARAMS(server.getName(),
 			message.getCommand()));
 		return 1;
