@@ -41,6 +41,16 @@ We implemented the following commands
 | PING     | Check server response.                         |
 | PONG     | Respond to a PING request.                   |
 
+### How it works
+
+Here is a graphical representation of how the server works. An annotated version can be found [here](https://www.figma.com/file/qUbRWMAYafTy1LIMP9Jbtl/irc-jam?type=whiteboard&node-id=0%3A1&t=BbWNFXiyWJP4WV8v-1) 
+
+<img src="imgs/server_client_setup.png" width="80%" align="center">
+<img src="imgs/polling_loop.png" width="80%" align="center">
+<img src="imgs/message_forwarding.png" width="80%" align="center">
+
+
+## Learning
 
 ### Soft Skills
 
@@ -56,14 +66,6 @@ The implementation of `ft_irc` involved a variety of technical skills:
 - **User Authentication**: Implementing user authentication and access control to ensure the security of the chat system.
 - **Error Handling**: Building mechanisms to handle errors gracefully, such as user disconnects and server failures.
 - **Concurrent Programming**: Managing multiple client connections simultaneously on the server.
-
-## How it works
-
-Here is a graphical representation of how the server works. An annotated version can be found [here](https://www.figma.com/file/qUbRWMAYafTy1LIMP9Jbtl/irc-jam?type=whiteboard&node-id=0%3A1&t=BbWNFXiyWJP4WV8v-1) 
-
-<img src="imgs/server_client_setup.png" width="80%" align="center">
-<img src="imgs/polling_loop.png" width="80%" align="center">
-<img src="imgs/message_forwarding.png" width="80%" align="center">
 
 ## Prerequisites
 
