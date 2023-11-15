@@ -95,14 +95,17 @@ Start the IRC server by running the compiled server executable with appropriate 
 
   ```bash
   ./ircserv <port> <password>
-  ```Launch the IRC client application to connect to the server and interact with other users.
+  ```
+Launch the IRC client application to connect to the server and interact with other users.
 
 To connect with Irssi, install it (see above). Run it with:
 
 ```bash
-irssi
+ irssi
 ```
+
 then 
+
 ```bash
 /connect 127.0.0.1 <port> <password> [<nick>]
 ```
