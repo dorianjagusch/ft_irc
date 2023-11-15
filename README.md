@@ -3,6 +3,7 @@
 *This project was developed as part of the School 42 curriculum in collaboration with [Tuukka Tikanoja](https://github.com/tikanoja).*
 
 ## Overview
+ <img src="imgs/teapot.png" width="48%" align="center"> <img src="imgs/irssi.png" width="48%" align="center">
 
 `ft_irc` is a project from School 42 that involves the creation of an IRC (Internet Relay Chat) server and client. IRC is a real-time text communication protocol, and this project offers an opportunity to gain expertise in network programming and communication protocols. As a reference client, we used [Irssi](https://irssi.org/New-users/). We recommend using it, too, when trying out the project.
 
@@ -25,14 +26,14 @@ We implemented the following commands
 | PART     | Leave a channel.                               |
 | PRIVMSG  | Send a private message to a user or channel.   |
 | NOTICE   | Send a notice to a user or channel.            |
+| PASS     | Provide password to register with the server.  |
 | NICK     | Change your nickname.                          |
 | USER     | Set your username and realname.               |
 | MODE     | Set the mode of a channel or user.            |
+| KILL     | Disconnect a user from the server             |
 | KICK     | Remove a user from a channel.                 |
 | TOPIC    | Set the topic of a channel.                   |
-| LIST     | List channels and their topics.               |
-| NAMES    | List users in a channel.                      |
-| WHOIS    | Get information about a user.                 |
+| INVITE   | Invite a user to a channel                    |
 | QUIT     | Disconnect from the IRC server.               |
 | MOTD     | Display the message of the day.               |
 | AWAY     | Set an away message.                          |
@@ -42,18 +43,26 @@ We implemented the following commands
 
 ### Soft Skills
 
-The successful completion of the `ft_irc` project required effective GitHub management and issue-solving skills. Utilizing GitHub for collaboration on the code, task management, and progress tracking was crucial. Strong communication skills played a vital role in coordinating efforts for a smooth development process.
+The successful completion of the `ft_irc` project required effective GitHub management and problem-solving skills. Utilizing git for collaboration on the code, task management, and progress tracking was crucial. Strong communication skills played a vital role in coordinating efforts for a smooth development process.
 
 ### Technical Skills
 
 The implementation of `ft_irc` involved a variety of technical skills:
 
-- **C Programming**: The entire project is implemented in the C programming language, following the Norm guidelines provided by School 42.
+- **C++ Programming**: The entire project is implemented in the C++ programming language, following the Norm guidelines provided by School 42.
 - **Network Programming**: Understanding network protocols, socket programming, and managing client-server communication.
 - **Command Parsing**: Developing a parser to handle and interpret IRC commands.
 - **User Authentication**: Implementing user authentication and access control to ensure the security of the chat system.
 - **Error Handling**: Building mechanisms to handle errors gracefully, such as user disconnects and server failures.
 - **Concurrent Programming**: Managing multiple client connections simultaneously on the server.
+
+## How it works
+
+Here is a graphical representation of how the server works. An annotated version can be found [here](https://www.figma.com/file/qUbRWMAYafTy1LIMP9Jbtl/irc-jam?type=whiteboard&node-id=0%3A1&t=BbWNFXiyWJP4WV8v-1) 
+
+<img src="imgs/server_client_setup.png" width="48%" align="center"> <img src="imgs/irssi.png" width="48%" align="center">
+<img src="imgs/polling_loop.png" width="48%" align="center"> <img src="imgs/irssi.png" width="48%" align="center">
+<img src="imgs/message_forwarding.png" width="48%" align="center"> <img src="imgs/irssi.png" width="48%" align="center">
 
 ## Prerequisites
 
@@ -84,11 +93,17 @@ To use the ft_irc project, follow these steps:
 Start the IRC server by running the compiled server executable with appropriate settings.
 
   ```bash
-  ./irc_server <options>
+  ./ircserv <port> <password>
   ```Launch the IRC client application to connect to the server and interact with other users.
 
+To connect with Irssi, install it (see above). Run it with:
+
 ```bash
-./irc_client <options>
+irssi
+```
+then 
+```bash
+/connect 127.0.0.1 <port> <password> [<nick>]
 ```
 
 Use IRC commands to join channels, send messages, and engage in real-time communication with other users.
