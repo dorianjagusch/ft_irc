@@ -65,7 +65,6 @@ The implementation of `ft_irc` involved a variety of technical skills:
 - **Command Parsing**: Developing a parser to handle and interpret IRC commands.
 - **User Authentication**: Implementing user authentication and access control to ensure the security of the chat system.
 - **Error Handling**: Building mechanisms to handle errors gracefully, such as user disconnects and server failures.
-- **Concurrent Programming**: Managing multiple client connections simultaneously on the server.
 
 ## Prerequisites
 
