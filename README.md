@@ -72,7 +72,7 @@ Before you start working on the `ft_irc` project, ensure that you have the follo
 
 - `gcc` (GNU Compiler Collection)
 - `make`
-- A compatible C library
+- A compatible C and C++ library
 
 Our repository should already contain any additional dependencies or libraries required for the project.
 
